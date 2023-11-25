@@ -20,7 +20,7 @@ import toastStyle from "../../util/toastConfig";
 
 type Props = {
   nft: NFTType;
-  collectionName: string; // Added collectionName to props
+  collectionName: string;
 };
 
 type AuctionFormData = {
@@ -43,31 +43,25 @@ type DirectFormData = {
 export default function SaleInfo({ nft, collectionName }: Props) {
   const router = useRouter();
 
-  // Find the collection by its name
   const collection = NFT_COLLECTION_ADDRESSES.find(
     (c) => c.name === collectionName
   );
   const collectionAddress = collection?.address || "";
 
-  // Connect to marketplace and NFT contracts
   const { contract: marketplace } = useContract(
     MARKETPLACE_ADDRESS,
     "marketplace-v3"
   );
   const { contract: nftCollection } = useContract(collectionAddress);
 
-  // Hook provides an async function to create a new auction listing
   const { mutateAsync: createAuctionListing } =
     useCreateAuctionListing(marketplace);
 
-  // Hook provides an async function to create a new direct listing
   const { mutateAsync: createDirectListing } =
     useCreateDirectListing(marketplace);
 
-  // Manage form submission state using tabs and conditional rendering
   const [tab, setTab] = useState<"direct" | "auction">("direct");
 
-  // Manage form values using react-hook-form library: Auction form
   const { register: registerAuction, handleSubmit: handleSubmitAuction } =
     useForm<AuctionFormData>({
       defaultValues: {
@@ -80,15 +74,12 @@ export default function SaleInfo({ nft, collectionName }: Props) {
       },
     });
 
-  // User requires to set marketplace approval before listing
   async function checkAndProvideApproval() {
-    // Check if approval is required
     const hasApproval = await nftCollection?.call("isApprovedForAll", [
       nft.owner,
       MARKETPLACE_ADDRESS,
     ]);
 
-    // If it is, provide approval
     if (!hasApproval) {
       const txResult = await nftCollection?.call("setApprovalForAll", [
         MARKETPLACE_ADDRESS,
@@ -107,7 +98,6 @@ export default function SaleInfo({ nft, collectionName }: Props) {
     return true;
   }
 
-  // Manage form values using react-hook-form library: Direct form
   const { register: registerDirect, handleSubmit: handleSubmitDirect } =
     useForm<DirectFormData>({
       defaultValues: {
@@ -209,10 +199,10 @@ export default function SaleInfo({ nft, collectionName }: Props) {
           <Web3Button
             contractAddress={MARKETPLACE_ADDRESS}
             action={async () => {
-              await handleSubmitDirect(handleSubmissionDirect)();
+              return await handleSubmitAuction(handleSubmissionAuction)();
             }}
-            onError={(error: { cause: any }) => {
-              toast(`Listed Failed! Reason: ${error.cause}`, {
+            onError={(error: Error) => {
+              toast(`Listed Failed! Reason: ${error.message}`, {
                 icon: "❌",
                 style: toastStyle,
                 position: "bottom-center",
@@ -287,8 +277,8 @@ export default function SaleInfo({ nft, collectionName }: Props) {
             action={async () => {
               return await handleSubmitAuction(handleSubmissionAuction)();
             }}
-            onError={(error: { cause: any }) => {
-              toast(`Listed Failed! Reason: ${error.cause}`, {
+            onError={(error: Error) => {
+              toast(`Listed Failed! Reason: ${error.message}`, {
                 icon: "❌",
                 style: toastStyle,
                 position: "bottom-center",

@@ -1,6 +1,7 @@
+```markdown
 # NFT Marketplace V3
 
-Create an NFT marketplace on top of your NFT collection on **any** EVM-compatible blockchain.
+Create an NFT marketplace on top of your NFT collections on **any** EVM-compatible blockchain. This version includes support for multiple collections, allowing for a diverse and expansive marketplace experience.
 
 ## Installation
 
@@ -34,11 +35,11 @@ Start the server
 
 ## Environment Variables
 
-To run this project, you will need to add environment variables. Check the `.env.example` file for all the environment variables required and add it to `.env.local` file or set them up on your hosting provider.
+To run this project, you will need to add the following environment variables to your `.env.local` file or set them up on your hosting provider. Refer to the `.env.example` file for all required variables.
 
 ## Deployment
 
-Deploy a copy of your application to IPFS using the following command:
+Deploy your application to IPFS with this command:
 
 ```bash
   yarn deploy
@@ -53,8 +54,9 @@ Deploy a copy of your application to IPFS using the following command:
 
 ## Contributing
 
-Contributions and [feedback](https://feedback.thirdweb.com) are always welcome! Please check our [open source page](https://thirdweb.com/open-source) for more information.
+Contributions and [feedback](https://feedback.thirdweb.com) are always welcome. See our [open source page](https://thirdweb.com/open-source) for more info.
 
-## Need help?
+## Need Help?
 
-For help, join the [discord](https://discord.gg/thirdweb) or visit our [support page](https://support.thirdweb.com).
+Join our [discord](https://discord.gg/thirdweb) or visit the [support page](https://support.thirdweb.com) for assistance.
+```
