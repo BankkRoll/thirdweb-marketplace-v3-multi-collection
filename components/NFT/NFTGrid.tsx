@@ -2,7 +2,6 @@
 import type { NFT as NFTType } from "@thirdweb-dev/sdk";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { NFT_COLLECTION_ADDRESSES } from "../../const/contractAddresses";
 import Skeleton from "../Skeleton/Skeleton";
 import NFT from "./NFT";
 import styles from "../../styles/Buy.module.css";
@@ -12,6 +11,7 @@ type Props = {
   data: NFTType[] | undefined;
   overrideOnclickBehavior?: (nft: NFTType) => void;
   emptyText?: string;
+  collectionAddress: string;
   collectionName: string;
 };
 
@@ -20,6 +20,7 @@ export default function NFTGrid({
   data,
   overrideOnclickBehavior,
   emptyText = "No NFTs found for this collection.",
+  collectionAddress,
   collectionName,
 }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -27,11 +28,6 @@ export default function NFTGrid({
   const itemsPerPage = 20;
   const [displayedData, setDisplayedData] = useState<NFTType[]>([]);
   const [isFetching, setIsFetching] = useState(false);
-
-  const collection = NFT_COLLECTION_ADDRESSES.find(
-    (c) => c.name === collectionName
-  );
-  const collectionAddress = collection?.address || "";
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -79,14 +75,18 @@ export default function NFTGrid({
         ))
       ) : displayedData.length > 0 ? (
         displayedData.map((nft, index) => {
-          const linkHref = `/token/${collectionAddress}/${nft.metadata.id}`;
+          const linkHref = `/${collectionAddress}/${nft.metadata.id}`;
           return !overrideOnclickBehavior ? (
             <Link
               href={linkHref}
               key={nft.metadata.id}
               className={styles.nftContainer}
             >
-              <NFT nft={nft} collectionName={collectionName} />
+              <NFT
+                nft={nft}
+                collectionName={collectionName}
+                collectionAddress={collectionAddress}
+              />
             </Link>
           ) : (
             <div
@@ -94,7 +94,11 @@ export default function NFTGrid({
               className={styles.nftContainer}
               onClick={() => overrideOnclickBehavior(nft)}
             >
-              <NFT nft={nft} collectionName={collectionName} />
+              <NFT
+                nft={nft}
+                collectionName={collectionName}
+                collectionAddress={collectionAddress}
+              />
             </div>
           );
         })

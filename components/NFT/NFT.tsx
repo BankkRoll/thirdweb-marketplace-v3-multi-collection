@@ -7,24 +7,17 @@ import {
 } from "@thirdweb-dev/react";
 import { NFT } from "@thirdweb-dev/sdk";
 import React from "react";
-import {
-  MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESSES,
-} from "../../const/contractAddresses";
+import { MARKETPLACE_ADDRESS } from "../../const/contractAddresses";
 import Skeleton from "../Skeleton/Skeleton";
 import styles from "./NFT.module.css";
 
 type Props = {
   nft: NFT;
+  collectionAddress: string;
   collectionName: string;
 };
 
-export default function NFTComponent({ nft, collectionName }: Props) {
-  const collection = NFT_COLLECTION_ADDRESSES.find(
-    (c) => c.name === collectionName
-  );
-  const collectionAddress = collection?.address || "";
-
+export default function NFTComponent({ nft, collectionAddress }: Props) {
   const { contract: marketplace, isLoading: loadingContract } = useContract(
     MARKETPLACE_ADDRESS,
     "marketplace-v3"

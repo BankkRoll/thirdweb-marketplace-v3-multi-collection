@@ -1,3 +1,4 @@
+/* .navContainer */
 .navContainer {
   width: 100%;
   display: flex;
@@ -13,6 +14,7 @@
   backdrop-filter: blur(5px);
 }
 
+/* .nav */
 .nav {
   padding-left: 2em;
   padding-right: 2em;
@@ -26,6 +28,7 @@
   background-color: transparent !important;
 }
 
+/* .navLeft */
 .navLeft {
   display: flex;
   flex-direction: row;
@@ -34,6 +37,7 @@
   transition: all 0.15s ease-in-out;
 }
 
+/* .navMiddle */
 .navMiddle {
   display: flex;
   margin-left: 12px;
@@ -42,6 +46,7 @@
   gap: 24px;
 }
 
+/* .link */
 .link {
   color: rgba(255, 255, 255, 0.6);
   font-size: 16px;
@@ -55,11 +60,13 @@
   color: rgba(255, 255, 255, 1);
 }
 
+/* .homeLink */
 .homeLink:hover {
   cursor: pointer;
   opacity: 0.8;
 }
 
+/* .navRight */
 .navRight {
   display: flex;
   flex-direction: row;
@@ -68,6 +75,7 @@
   justify-content: center;
 }
 
+/* .profileImage */
 .profileImage {
   margin-top: 6px;
   transition: all 0.15s ease-in-out;
@@ -78,18 +86,99 @@
   opacity: 0.8;
 }
 
+/* .homeLink */
 .homeLink {
   font-size: 24px;
   font-weight: 500;
 }
 
+/* .buttonLink:hover */
 .buttonLink:hover {
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
-/* Sreens less than 720px */
+/* Styles for screens less than 720px */
 @media (max-width: 500px) {
   .navConnect {
     display: none !important;
   }
+}
+
+/* Styles for the search dropdown */
+/* .relative */
+.relative {
+  position: relative;
+}
+
+/* .absolute */
+.absolute {
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px; /* Adjust the max height as needed */
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  background-color: #181818;
+  border-radius: 0.25rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Show dropdown when searchQuery is not empty */
+.relative:hover .absolute,
+.relative:focus-within .absolute,
+.relative:active .absolute {
+  display: block;
+}
+
+/* .collectionList */
+.collectionList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* .collectionItem */
+.collectionItem {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Hover effect for dropdown items */
+.collectionItem:hover {
+  background-color: #636262;
+}
+
+/* .collectionName */
+.collectionName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Style for collection images */
+.collectionImage img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* .relative input */
+.relative input {
+  font-size: 18px; /* Increase font size */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border-radius: 10px; /* Increase border radius for rounded corners */
+}
+
+/* You can adjust the width of the input if needed */
+/* .relative input */
+.relative input {
+  width: 100%; /* Adjust width as needed */
 }

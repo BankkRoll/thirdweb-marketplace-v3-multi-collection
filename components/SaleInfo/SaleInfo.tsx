@@ -21,6 +21,7 @@ import toastStyle from "../../util/toastConfig";
 type Props = {
   nft: NFTType;
   collectionName: string;
+  contractAddress: string;
 };
 
 type AuctionFormData = {
@@ -40,13 +41,15 @@ type DirectFormData = {
   endDate: Date;
 };
 
-export default function SaleInfo({ nft, collectionName }: Props) {
+export default function SaleInfo({
+  nft,
+  collectionName,
+  contractAddress,
+}: Props) {
   const router = useRouter();
 
-  const collection = NFT_COLLECTION_ADDRESSES.find(
-    (c) => c.name === collectionName
-  );
-  const collectionAddress = collection?.address || "";
+  // Use the provided contract address
+  const collectionAddress = contractAddress;
 
   const { contract: marketplace } = useContract(
     MARKETPLACE_ADDRESS,
