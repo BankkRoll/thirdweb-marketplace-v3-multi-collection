@@ -43,7 +43,7 @@ export default function ListingWrapper({ listing, collectionName }: Props) {
       key={nft.metadata.id}
       className={styles.nftContainer}
     >
-      <NFT nft={nft} collectionName={collectionName} />
+      <NFT collectionAddress={collectionAddress} nft={nft} collectionName={collectionName} />
     </Link>
   );
 }

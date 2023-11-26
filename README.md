@@ -1,4 +1,3 @@
-```markdown
 # NFT Marketplace V3
 
 Create an NFT marketplace on top of your NFT collections on **any** EVM-compatible blockchain. This version includes support for multiple collections, allowing for a diverse and expansive marketplace experience.
@@ -59,4 +58,3 @@ Contributions and [feedback](https://feedback.thirdweb.com) are always welcome. 
 ## Need Help?
 
 Join our [discord](https://discord.gg/thirdweb) or visit the [support page](https://support.thirdweb.com) for assistance.
-```
