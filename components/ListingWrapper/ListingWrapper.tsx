@@ -1,9 +1,9 @@
 // components/ListingWrapper/ListingWrapper.tsx
 import { useContract, useNFT } from "@thirdweb-dev/react";
-import { DirectListingV3, EnglishAuction } from "@thirdweb-dev/sdk";
+import { DirectListingV3, EnglishAuction, ThirdwebSDK } from "@thirdweb-dev/sdk";
 import Link from "next/link";
-import React from "react";
-import { NFT_COLLECTION_ADDRESSES } from "../../const/contractAddresses";
+import React, { useEffect, useState } from "react";
+import { NETWORK, NFT_COLLECTION_ADDRESSES } from "../../const/contractAddresses";
 import styles from "../../styles/Buy.module.css";
 import NFT from "../NFT/NFT";
 import Skeleton from "../Skeleton/Skeleton";
@@ -13,13 +13,37 @@ type Props = {
   collectionName: string;
 };
 
-export default function ListingWrapper({ listing, collectionName }: Props) {
-  const collection = NFT_COLLECTION_ADDRESSES.find(
-    (collection) => collection.name === collectionName
-  );
-  const collectionAddress = collection?.address || "";
+interface CollectionMetadata {
+  name: string;
+  address: string;
+}
 
-  const { contract: nftContract } = useContract(collectionAddress);
+export default function ListingWrapper({ listing, collectionName }: Props) {
+  const [collection, setCollection] = useState<CollectionMetadata | null>(null);
+
+  useEffect(() => {
+    const sdk = new ThirdwebSDK(NETWORK);
+    const fetchCollections = async () => {
+      const collectionData = await Promise.all(
+        NFT_COLLECTION_ADDRESSES.map(async (collection) => {
+          const contract = sdk.getContract(collection.address);
+          const metadata = await (await contract).metadata.get();
+          return {
+            name: metadata.name,
+            address: collection.address,
+          };
+        })
+      );
+      const selectedCollection = collectionData.find(
+        (c) => c.name === collectionName
+      );
+      setCollection(selectedCollection || null);
+    };
+
+    fetchCollections();
+  }, [collectionName]);
+
+  const { contract: nftContract } = useContract(collection?.address || "");
   const { data: nft, isLoading } = useNFT(nftContract, listing.asset.id);
 
   if (!collection) {
@@ -43,7 +67,11 @@ export default function ListingWrapper({ listing, collectionName }: Props) {
       key={nft.metadata.id}
       className={styles.nftContainer}
     >
-      <NFT collectionAddress={collectionAddress} nft={nft} collectionName={collectionName} />
+      <NFT
+        collectionAddress={collection.address}
+        nft={nft}
+        collectionName={collection.name}
+      />
     </Link>
   );
 }
