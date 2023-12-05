@@ -1,11 +1,10 @@
 // pages/index.tsx
-import type { NextPage } from "next";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
+import CollectionCard from "../components/Collection/CollectionCard";
 import styles from "../styles/Home.module.css";
 import { NFT_COLLECTION_ADDRESSES, NETWORK } from "../const/contractAddresses";
-import CollectionCard from "../components/Collection/CollectionCard";
 
 interface CollectionMetadata {
   name: string;
@@ -13,12 +12,14 @@ interface CollectionMetadata {
   image: string;
 }
 
-const Home: NextPage = () => {
+const Home: React.FC = () => {
   const [collections, setCollections] = useState<CollectionMetadata[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const sdk = new ThirdwebSDK(NETWORK);
     const fetchCollections = async () => {
+      setIsLoading(true);
       const collectionData = await Promise.all(
         NFT_COLLECTION_ADDRESSES.map(async (collection) => {
           const contract = sdk.getContract(collection.address);
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
         })
       );
       setCollections(collectionData);
+      setIsLoading(false);
     };
 
     fetchCollections();
@@ -87,15 +89,29 @@ const Home: NextPage = () => {
           <div className={styles.collectionContainer}>
             <h2 className={styles.collectionTitle}>Explore Collections</h2>
             <div className={styles.collectionGrid}>
-              {collections.map((collection, index) => (
-                <CollectionCard
-                  contractAddress={NFT_COLLECTION_ADDRESSES[index].address}
-                  key={index}
-                  collectionName={collection.name}
-                  description={collection.description}
-                  imageUrl={collection.image}
-                />
-              ))}
+              {isLoading
+                ? [...Array(NFT_COLLECTION_ADDRESSES.length)].map(
+                    (_, index) => (
+                      <CollectionCard
+                        key={index}
+                        contractAddress=""
+                        collectionName=""
+                        description=""
+                        imageUrl=""
+                        isLoading={isLoading}
+                      />
+                    )
+                  )
+                : collections.map((collection, index) => (
+                    <CollectionCard
+                      contractAddress={NFT_COLLECTION_ADDRESSES[index].address}
+                      key={index}
+                      collectionName={collection.name}
+                      description={collection.description}
+                      imageUrl={collection.image}
+                      isLoading={isLoading}
+                    />
+                  ))}
             </div>
           </div>
         </div>

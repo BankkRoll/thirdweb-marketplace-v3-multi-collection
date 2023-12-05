@@ -7,7 +7,7 @@ import {
   NFT_COLLECTION_ADDRESSES,
   NETWORK,
 } from "../../const/contractAddresses";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface Collection {
   address: string;
@@ -22,6 +22,7 @@ export function Navbar() {
     []
   );
   const [collections, setCollections] = useState<Collection[]>([]);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const sdk = new ThirdwebSDK(NETWORK);
@@ -53,6 +54,11 @@ export function Navbar() {
     setFilteredCollections(filtered);
   };
 
+  const handleCollectionSelect = () => {
+    setSearchQuery("");
+    setFilteredCollections([]);
+  };
+
   const showDropdown = searchQuery.length > 0;
 
   return (
@@ -70,7 +76,7 @@ export function Navbar() {
         </div>
 
         <div className={styles.navCenter}>
-          <div className={styles.relative}>
+          <div className={styles.relative} ref={dropdownRef}>
             <input
               type="text"
               placeholder="Search collections..."
@@ -82,7 +88,11 @@ export function Navbar() {
               <div className={`${styles.absolute} search-results`}>
                 <ul className={`${styles.collectionList}`}>
                   {filteredCollections.map((collection, index) => (
-                    <li key={index} className={`${styles.collectionItem}`}>
+                    <li
+                      key={index}
+                      className={`${styles.collectionItem}`}
+                      onClick={handleCollectionSelect}
+                    >
                       <Link href={`/${collection.address}/buy`}>
                         <div className={`${styles.collectionImage}`}>
                           <img
